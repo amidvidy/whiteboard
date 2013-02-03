@@ -4,17 +4,19 @@ $(document).ready(function() {
     // Initialize canvas
     var board = document.getElementById("board");
     var ctx = board.getContext("2d");
+
+    // Initialize jQuery objects
     var $board = $(board);
     var $colorPicker = $("#colorPicker");
     var $widthPicker = $("#widthPicker");
     var $resetButton = $("#resetButton");
 
+    // Initialize state
+    ctx.lineWidth = 3.0;
+    var mouseDown = false;
+
     // Style
     $board.css('border', '1px solid black');
-
-    ctx.beginPath();
-    // default settings
-    ctx.lineWidth = 3.0;
 
     // color picking
     $colorPicker.spectrum({
@@ -36,8 +38,6 @@ $(document).ready(function() {
     });
 
     // drawing events
-    var mouseDown = false;
-
     $board.mousedown(function() {
         ctx.beginPath();
         mouseDown = true;
@@ -58,4 +58,7 @@ $(document).ready(function() {
             ctx.stroke();
         }
     });
+
+    // Start drawing!
+    ctx.beginPath();
 });
