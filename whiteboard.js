@@ -28,7 +28,6 @@ $(document).ready(function() {
 
     // width picking
     $widthPicker.change(function() {
-        console.log(this);
         ctx.lineWidth = $(this).val();
     });
 
