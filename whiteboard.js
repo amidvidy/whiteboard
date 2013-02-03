@@ -3,7 +3,7 @@ $(document).ready(function() {
     var ctx = board.getContext("2d");
     ctx.beginPath();
 
-    $("#board").click(function(event) {
+    $("#board").mousemove(function(event) {
         var offset = $(this).offset();
         var mouseX = event.pageX - offset.left;
         var mouseY = event.pageY - offset.top;
