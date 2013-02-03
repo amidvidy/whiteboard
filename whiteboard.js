@@ -47,7 +47,7 @@ $(document).ready(function() {
         mouseDown = false;
     });
 
-    $("#board").mousemove(function(event) {
+    $board.mousemove(function(event) {
         var offset = $(this).offset();
         var mouseX = event.pageX - offset.left;
         var mouseY = event.pageY - offset.top;
