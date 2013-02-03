@@ -5,11 +5,20 @@ $(document).ready(function() {
     var board = document.getElementById("board");
     var ctx = board.getContext("2d");
     var $board = $(board);
+    var $picker = $("#picker");
 
     // Style
     $board.css('border', '1px solid black');
 
     ctx.beginPath();
+
+    // color picking
+    $picker.spectrum({
+        color: "#FFFFF",
+        change: function(color) {
+            ctx.strokeStyle = color.toHexString();
+        }
+    });
 
     // mouse events
     var mouseDown = false;
