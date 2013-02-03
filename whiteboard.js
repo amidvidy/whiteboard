@@ -1,6 +1,11 @@
+// This code isn't going to be pretty. Just trying to get a feel for the html5 canvas API.
 $(document).ready(function() {
+
+    // Initialize objects
     var board = document.getElementById("board");
     var ctx = board.getContext("2d");
+
+
     ctx.beginPath();
 
     $("#board").mousemove(function(event) {
