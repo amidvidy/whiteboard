@@ -7,6 +7,7 @@ $(document).ready(function() {
     var $board = $(board);
     var $colorPicker = $("#colorPicker");
     var $widthPicker = $("#widthPicker");
+    var $resetButton = $("#resetButton");
 
     // Style
     $board.css('border', '1px solid black');
@@ -29,7 +30,12 @@ $(document).ready(function() {
         ctx.lineWidth = $(this).val();
     });
 
-    // mouse events
+    // reset button
+    $resetButton.click(function() {
+        ctx.clearRect(0, 0, board.width, board.height);
+    });
+
+    // drawing events
     var mouseDown = false;
 
     $board.mousedown(function() {
