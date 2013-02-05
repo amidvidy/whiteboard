@@ -13,9 +13,30 @@ $(document).ready(function() {
 
     // Initialize state
     ctx.lineWidth = 3.0;
+    // Holds history of each segment
+    var segments = [];
+    // Holds the current segment being drawn
+    var curSegment = {};
     var mouseDown = false;
 
-    // Style
+    var drawSegment = function(segment) {
+
+        ctx.beginPath();
+        ctx.moveTo(segment.start.x, segment.start.y);
+        ctx.lineTo(segment.end.x, segment.end.y);
+        ctx.moveTo(segment.end.x, segment.end.y);
+        ctx.stroke();
+    }
+
+    var mousePos = function(event) {
+        var offset = $(this).offset();
+        return {
+            x: event.pageX - offset.left,
+            y:  event.pageY - offset.top
+        };
+    };
+
+    // Style for the lazy
     $board.css('border', '1px solid black');
 
     // color picking
@@ -37,8 +58,11 @@ $(document).ready(function() {
     });
 
     // drawing events
-    $board.mousedown(function() {
+    $board.mousedown(function(event) {
+        // Start drawing
         ctx.beginPath();
+        console.log('foo');
+        curSegment.start = mousePos.call(this, event);
         mouseDown = true;
     });
 
@@ -47,17 +71,24 @@ $(document).ready(function() {
     });
 
     $board.mousemove(function(event) {
-        var offset = $(this).offset();
-        var mouseX = event.pageX - offset.left;
-        var mouseY = event.pageY - offset.top;
+        var pos = mousePos.call(this, event);
 
         if (mouseDown) {
-            ctx.lineTo(mouseX, mouseY);
-            ctx.moveTo(mouseX, mouseY);
-            ctx.stroke();
+            // Record segment
+            curSegment.end = pos;
+            curSegment.rgb = ctx.strokeStyle;
+
+            segments.push(curSegment);
+
+            console.log(segments);
+
+            // Draw segment
+            drawSegment(curSegment);
+
+            // Start next segment and end of current segment
+            curSegment.start = curSegment.end;
+
         }
     });
 
-    // Start drawing!
-    ctx.beginPath();
 });
