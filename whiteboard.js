@@ -20,12 +20,17 @@ $(document).ready(function() {
     var mouseDown = false;
 
     var drawSegment = function(segment) {
-
         ctx.beginPath();
         ctx.moveTo(segment.start.x, segment.start.y);
         ctx.lineTo(segment.end.x, segment.end.y);
         ctx.moveTo(segment.end.x, segment.end.y);
         ctx.stroke();
+    };
+
+    var undoLastSegment = function() {
+        clearBoard();
+        segments.pop();
+        segments.forEach(drawSegment);
     };
 
     var clearBoard = function() {
