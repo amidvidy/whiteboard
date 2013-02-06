@@ -31,7 +31,9 @@ $(document).ready(function() {
     var undoLastSegment = function() {
         clearBoard();
         segments.pop();
-        segments.forEach(drawSegment);
+        segments.forEach(function(segment) {
+            drawSegment(segment);
+        });
     };
 
     var clearBoard = function() {
