@@ -30,7 +30,7 @@ $(document).ready(function() {
 
     var undoLastSegment = function() {
         clearBoard();
-        segments.pop();
+        //segments.pop();
         segments.forEach(function(segment) {
             drawSegment(segment);
         });
@@ -78,30 +78,27 @@ $(document).ready(function() {
     // drawing events
     $board.mousedown(function(event) {
         // Start drawing
-        curSegment.start = mousePos.call(this, event);
         mouseDown = true;
     });
 
     $board.mouseup(function() {
         mouseDown = false;
+        curSegment = {};
     });
 
     $board.mousemove(function(event) {
-        var pos = mousePos.call(this, event);
+        var pos;
 
         if (mouseDown) {
             // Record segment
-            curSegment.end = pos;
+            pos = mousePos.call(this, event);
+            if ('start' in curSegment) {
+                curSegment.end = pos;
+                segments.push(curSegment);
+                drawSegment(curSegment);
+            }
+            curSegment.start = pos;
             curSegment.rgb = ctx.strokeStyle;
-
-            segments.push(curSegment);
-
-            // Draw segment
-            drawSegment(curSegment);
-
-            // Start next segment and end of current segment
-            curSegment.start = curSegment.end;
-
         }
     });
 
