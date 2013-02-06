@@ -28,6 +28,10 @@ $(document).ready(function() {
         ctx.stroke();
     };
 
+    var clearBoard = function() {
+        ctx.clearRect(0, 0, board.width, board.height);
+    };
+
     var mousePos = function(event) {
         var offset = $(this).offset();
         return {
@@ -54,7 +58,7 @@ $(document).ready(function() {
 
     // reset button
     $resetButton.click(function() {
-        ctx.clearRect(0, 0, board.width, board.height);
+        clearBoard();
     });
 
     // drawing events
