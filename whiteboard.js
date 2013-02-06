@@ -78,7 +78,6 @@ $(document).ready(function() {
     // drawing events
     $board.mousedown(function(event) {
         // Start drawing
-        ctx.beginPath();
         curSegment.start = mousePos.call(this, event);
         mouseDown = true;
     });
