@@ -55,6 +55,7 @@ $(document).ready(function() {
     $colorPicker.spectrum({
         color: "#FFFFF",
         change: function(color) {
+            // TODO: set correct color in drawSegment
             ctx.strokeStyle = color.toHexString();
         }
     });
