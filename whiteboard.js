@@ -10,6 +10,7 @@ $(document).ready(function() {
     var $colorPicker = $("#colorPicker");
     var $widthPicker = $("#widthPicker");
     var $resetButton = $("#resetButton");
+    var $undoButton = $("#undoButton");
 
     // Initialize state
     ctx.lineWidth = 3.0;
@@ -59,6 +60,11 @@ $(document).ready(function() {
     // width picking
     $widthPicker.change(function() {
         ctx.lineWidth = $(this).val();
+    });
+
+    // undo button
+    $undoButton.click(function() {
+        undoLastSegment();
     });
 
     // reset button
