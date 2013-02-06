@@ -26,7 +26,7 @@ $(document).ready(function() {
         ctx.lineTo(segment.end.x, segment.end.y);
         ctx.moveTo(segment.end.x, segment.end.y);
         ctx.stroke();
-    }
+    };
 
     var mousePos = function(event) {
         var offset = $(this).offset();
@@ -61,7 +61,6 @@ $(document).ready(function() {
     $board.mousedown(function(event) {
         // Start drawing
         ctx.beginPath();
-        console.log('foo');
         curSegment.start = mousePos.call(this, event);
         mouseDown = true;
     });
@@ -79,8 +78,6 @@ $(document).ready(function() {
             curSegment.rgb = ctx.strokeStyle;
 
             segments.push(curSegment);
-
-            console.log(segments);
 
             // Draw segment
             drawSegment(curSegment);
