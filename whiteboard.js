@@ -3,14 +3,46 @@ $(document).ready(function() {
 
     // Whiteboard constructor
     var Whiteboard = function(canvas) {
-        this.canvas = canvas
+        this.canvas = canvas;
+        this.ctx = canvas.getContext("2d");
+        this.history = [];
+
+        this.ctx.lineWidth = 3.0;
+    };
+
+    Whiteboard.prototype.resetBoard = function() {
+        this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height)
+    };
+
+    Whiteboard.prototype.redraw = function() {
+        // Draw all the segments!
+        this.resetBoard();
+        for (var i = 1; i < this.history.length; i++) {
+            this.drawSegment(this.history[i-1], this.history[i])
+        }
+    };
+
+    Whiteboard.prototype.drawSegment = function(start, end) {
+        this.ctx.beginPath();
+        this.ctx.moveTo(start.x, start.y);
+        this.ctx.lineTo(end.x, end.y)
+        this.ctx.closePath();
+        this.ctx.stroke();
+    };
+
+    Whiteboard.prototype.addSegment = function(pos) {
+        this.history.push(pos)
+        this.redraw();
+    };
+
+    Whiteboard.prototype.setLineWidth = function(width) {
+        this.ctx.lineWidth = width;
     }
-
-
 
     // Initialize canvas
     var board = document.getElementById("board");
-    var ctx = board.getContext("2d");
+    //var ctx = board.getContext("2d");
+    var wb = new Whiteboard(document.getElementById("board"));
 
     // Initialize jQuery objects
     var $board = $(board);
@@ -20,33 +52,7 @@ $(document).ready(function() {
     var $undoButton = $("#undoButton");
 
     // Initialize state
-    ctx.lineWidth = 3.0;
-    // Holds history of each segment
-    var segments = [];
-    // Holds the current segment being drawn
-    var curSegment = {};
     var mouseDown = false;
-
-    var drawSegment = function(segment) {
-        console.log(segment)
-        ctx.beginPath();
-        ctx.moveTo(segment.start.x, segment.start.y);
-        ctx.lineTo(segment.end.x, segment.end.y);
-        ctx.moveTo(segment.end.x, segment.end.y);
-        ctx.stroke();
-    };
-
-    var undoLastSegment = function() {
-        clearBoard();
-        //segments.pop();
-        segments.forEach(function(segment) {
-            drawSegment(segment);
-        });
-    };
-
-    var clearBoard = function() {
-        ctx.clearRect(0, 0, board.width, board.height);
-    };
 
     var mousePos = function(event) {
         var offset = $(this).offset();
@@ -70,17 +76,18 @@ $(document).ready(function() {
 
     // width picking
     $widthPicker.change(function() {
-        ctx.lineWidth = $(this).val();
+        wb.setLineWidth($(this).val());
     });
 
     // undo button
     $undoButton.click(function() {
-        undoLastSegment();
+        //undoLastSegment();
+        // no op
     });
 
     // reset button
     $resetButton.click(function() {
-        clearBoard();
+        wb.resetBoard();
     });
 
     // drawing events
@@ -100,13 +107,7 @@ $(document).ready(function() {
         if (mouseDown) {
             // Record segment
             pos = mousePos.call(this, event);
-            if ('start' in curSegment) {
-                curSegment.end = pos;
-                segments.push(curSegment);
-                drawSegment(curSegment);
-            }
-            curSegment.start = pos;
-            curSegment.rgb = ctx.strokeStyle;
+            wb.addSegment(pos);
         }
     });
 
