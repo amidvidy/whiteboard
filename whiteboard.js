@@ -1,6 +1,13 @@
 // This code isn't going to be pretty. Just trying to get a feel for the html5 canvas API.
 $(document).ready(function() {
 
+    // Whiteboard constructor
+    var Whiteboard = function(canvas) {
+        this.canvas = canvas
+    }
+
+
+
     // Initialize canvas
     var board = document.getElementById("board");
     var ctx = board.getContext("2d");
@@ -21,6 +28,7 @@ $(document).ready(function() {
     var mouseDown = false;
 
     var drawSegment = function(segment) {
+        console.log(segment)
         ctx.beginPath();
         ctx.moveTo(segment.start.x, segment.start.y);
         ctx.lineTo(segment.end.x, segment.end.y);
