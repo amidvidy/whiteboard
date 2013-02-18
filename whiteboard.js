@@ -7,6 +7,8 @@ $(document).ready(function() {
         this.ctx = canvas.getContext("2d");
         this.history = [];
 
+        this.ctx.lineJoin = 'round';
+
         this.lineColor = '#000000'
         this.lineWidth = 3.0;
     };
