@@ -7,7 +7,10 @@ $(document).ready(function() {
         this.ctx = canvas.getContext("2d");
         this.history = [];
 
-        this.ctx.lineWidth = 3.0;
+        this.lineColor = '#000000'
+        this.lineWidth = 3.0;
+
+        //this.ctx.lineWidth = 3.0;
     };
 
     Whiteboard.prototype.resetBoard = function() {
@@ -24,23 +27,29 @@ $(document).ready(function() {
 
     Whiteboard.prototype.drawSegment = function(start, end) {
         this.ctx.beginPath();
+        this.ctx.lineWidth = start.lineWidth;
+        this.ctx.strokeStyle = start.lineColor;
         this.ctx.moveTo(start.x, start.y);
         this.ctx.lineTo(end.x, end.y)
         this.ctx.closePath();
         this.ctx.stroke();
     };
 
-    Whiteboard.prototype.addSegment = function(pos, strokeWidth, color) {
-        this.history.push(pos)
+    Whiteboard.prototype.addSegment = function(event) {
+
+        event.lineColor = this.lineColor;
+        event.lineWidth = this.lineWidth;
+
+        this.history.push(event)
         this.redraw();
     };
 
     Whiteboard.prototype.setLineWidth = function(width) {
-        this.ctx.lineWidth = width;
+        this.lineWidth = width;
     };
 
     Whiteboard.prototype.setLineColor = function(colorCode) {
-        this.ctx.strokeStyle = colorCode;
+        this.lineColor = colorCode;
     };
 
     // Initialize canvas
