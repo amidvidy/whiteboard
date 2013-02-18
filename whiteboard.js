@@ -34,7 +34,6 @@ $(document).ready(function() {
     };
 
     Whiteboard.prototype.addSegment = function(event) {
-
         event.lineColor = this.lineColor;
         event.lineWidth = this.lineWidth;
 
@@ -59,7 +58,7 @@ $(document).ready(function() {
     var $board = $(board);
     var $colorPicker = $("#colorPicker");
     var $widthPicker = $("#widthPicker");
-    var $resetButton = $("#resetButton");
+n    var $resetButton = $("#resetButton");
     var $undoButton = $("#undoButton");
 
     // Initialize state
