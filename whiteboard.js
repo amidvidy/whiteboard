@@ -58,7 +58,7 @@ $(document).ready(function() {
     var $board = $(board);
     var $colorPicker = $("#colorPicker");
     var $widthPicker = $("#widthPicker");
-n    var $resetButton = $("#resetButton");
+    var $resetButton = $("#resetButton");
     var $undoButton = $("#undoButton");
 
     // Initialize state
