@@ -9,8 +9,6 @@ $(document).ready(function() {
 
         this.lineColor = '#000000'
         this.lineWidth = 3.0;
-
-        //this.ctx.lineWidth = 3.0;
     };
 
     Whiteboard.prototype.resetBoard = function() {
