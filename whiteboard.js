@@ -11,7 +11,7 @@ $(document).ready(function() {
     };
 
     Whiteboard.prototype.resetBoard = function() {
-        this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height)
+        this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
     };
 
     Whiteboard.prototype.redraw = function() {
@@ -30,14 +30,18 @@ $(document).ready(function() {
         this.ctx.stroke();
     };
 
-    Whiteboard.prototype.addSegment = function(pos) {
+    Whiteboard.prototype.addSegment = function(pos, strokeWidth, color) {
         this.history.push(pos)
         this.redraw();
     };
 
     Whiteboard.prototype.setLineWidth = function(width) {
         this.ctx.lineWidth = width;
-    }
+    };
+
+    Whiteboard.prototype.setLineColor = function(colorCode) {
+        this.ctx.strokeStyle = colorCode;
+    };
 
     // Initialize canvas
     var board = document.getElementById("board");
@@ -69,8 +73,7 @@ $(document).ready(function() {
     $colorPicker.spectrum({
         color: "#FFFFF",
         change: function(color) {
-            // TODO: set correct color in drawSegment
-            ctx.strokeStyle = color.toHexString();
+            wb.setLineColor(color.toHexString());
         }
     });
 
