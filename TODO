@@ -1,0 +1,5 @@
+- Add undo/redo functionality.
+- Proper styling.
+- Code cleanup, separate whiteboard class into its own file.
+- Multiplayer version w/ node
+ 
