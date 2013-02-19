@@ -58,6 +58,11 @@ $(document).ready(function() {
         this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
     };
 
+    Whiteboard.prototype.resetHistory = function() {
+        this.history = [];
+        this.redraw();
+    };
+
     Whiteboard.prototype.redraw = function() {
         // Draw all the segments!
         var curEvent, prevEvent;
@@ -144,7 +149,7 @@ $(document).ready(function() {
 
     // reset button
     $resetButton.click(function() {
-        wb.resetBoard();
+        wb.resetHistory();
     });
 
 });
