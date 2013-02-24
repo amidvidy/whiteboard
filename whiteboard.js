@@ -11,13 +11,14 @@ $(document).ready(function() {
         this.$canvas = $(canvas);
         this.offsetLeft = this.$canvas.offset().left;
         this.offsetTop = this.$canvas.offset().top;
-
         this.ctx = canvas.getContext("2d");
+
         this.history = [];
+        this.logicalTime = 0;
 
         this.ctx.lineJoin = 'round';
 
-        this.lineColor = '#000000'
+        this.lineColor = '#000000';
         this.lineWidth = 3.0;
 
         this.isDrawing = false;
@@ -34,18 +35,20 @@ $(document).ready(function() {
         this.$canvas.mousedown(function(event) {
             this.isDrawing = true;
             this.stateChange(mousePos(event));
-            this.redraw();
+            this.draw(this.logicalTime, ++this.logicalTime);
         }.bind(this));
 
         this.$canvas.mousemove(function(event) {
             if (this.isDrawing) {
                 this.stateChange(mousePos(event));
+                this.draw(this.logicalTime, ++this.logicalTime);
             }
-            this.redraw();
         }.bind(this));
 
         this.$canvas.mouseup(function(event) {
             this.isDrawing = false;
+            this.stateChange(mousePos(event));
+            this.draw(this.logicalTime, ++this.logicalTime);
         }.bind(this));
 
         this.$canvas.mouseleave(function(event) {
@@ -58,28 +61,30 @@ $(document).ready(function() {
         this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
     };
 
+
     Whiteboard.prototype.resetHistory = function() {
         this.history = [];
-        this.redraw();
+        this.logicalTime = 0;
+        this.resetBoard();
     };
 
-    Whiteboard.prototype.redraw = function() {
-        // Draw all the segments!
+    Whiteboard.prototype.draw = function(startTime, endTime) {
         var curEvent = null,
             prevEvent = null;
-        this.resetBoard();
-        for (var i = 1; i < this.history.length; i++) {
-            curEvent = this.history[i];
-            prevEvent = this.history[i-1];
+        for (var time = startTime; time < endTime; time++) {
+            curEvent = this.history[time];
+            prevEvent = this.history[time-1];
+
+            // kind of a hack but lets fix this later, for when startTime=0;
+            if (!prevEvent) continue;
 
             this.ctx.beginPath();
             this.ctx.lineWidth = curEvent.width;
             this.ctx.strokeStyle = curEvent.color;
-
-            if (curEvent.isDrawing) {
+            if (prevEvent.drawing) {
                 this.ctx.moveTo(prevEvent.pos.x, prevEvent.pos.y);
             } else {
-                this.ctx.moveTo(prevEvent.pos.x-1, prevEvent.pos.y);
+                this.ctx.moveTo(curEvent.pos.x-1, curEvent.pos.y);
             }
 
             this.ctx.lineTo(curEvent.pos.x, curEvent.pos.y);
@@ -87,15 +92,6 @@ $(document).ready(function() {
             this.ctx.closePath();
             this.ctx.stroke();
         }
-    };
-
-    Whiteboard.prototype.draw = function() {
-
-    };
-
-    Whiteboard.prototype.nextState = function() {
-        
-
     };
 
     Whiteboard.prototype.stateChange = function(pos) {
