@@ -65,32 +65,37 @@ $(document).ready(function() {
 
     Whiteboard.prototype.redraw = function() {
         // Draw all the segments!
-        var curEvent, prevEvent;
+        var curEvent = null,
+            prevEvent = null;
         this.resetBoard();
         for (var i = 1; i < this.history.length; i++) {
             curEvent = this.history[i];
             prevEvent = this.history[i-1];
 
+            this.ctx.beginPath();
+            this.ctx.lineWidth = curEvent.width;
+            this.ctx.strokeStyle = curEvent.color;
+
             if (curEvent.isDrawing) {
-                // This event was due to a mouse drag when mouse was already down
-                this.drawSegment(prevEvent.pos, curEvent.pos,
-                                 curEvent.color, curEvent.width);
+                this.ctx.moveTo(prevEvent.pos.x, prevEvent.pos.y);
             } else {
-                // This event was due to a mouse click
-                this.drawSegment({x: curEvent.pos.x-1, y: curEvent.pos.y},
-                                 curEvent.pos, curEvent.color, curEvent.width);
+                this.ctx.moveTo(prevEvent.pos.x-1, prevEvent.pos.y);
             }
+
+            this.ctx.lineTo(curEvent.pos.x, curEvent.pos.y);
+
+            this.ctx.closePath();
+            this.ctx.stroke();
         }
     };
 
-    Whiteboard.prototype.drawSegment = function(start, end, color, width) {
-        this.ctx.beginPath();
-        this.ctx.lineWidth = width;
-        this.ctx.strokeStyle = color;
-        this.ctx.moveTo(start.x, start.y);
-        this.ctx.lineTo(end.x, end.y)
-        this.ctx.closePath();
-        this.ctx.stroke();
+    Whiteboard.prototype.draw = function() {
+
+    };
+
+    Whiteboard.prototype.nextState = function() {
+        
+
     };
 
     Whiteboard.prototype.stateChange = function(pos) {
