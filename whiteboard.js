@@ -53,6 +53,8 @@ $(document).ready(function() {
 
         this.$canvas.mouseleave(function(event) {
             this.isDrawing = false;
+            this.stateChange(mousePos(event));
+            this.draw(this.logicalTime, ++this.logicalTime);
         }.bind(this));
 
     };
@@ -114,7 +116,7 @@ $(document).ready(function() {
     // Initialize canvas
     var board = document.getElementById("board");
     //var ctx = board.getContext("2d");
-    var wb = new Whiteboard(document.getElementById("board"));
+    var wb = new Whiteboard(board);
 
     // Initialize jQuery objects
     var $board = $(board);
