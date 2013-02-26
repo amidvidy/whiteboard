@@ -1,4 +1,5 @@
-- Add undo/redo functionality.
+- Add undo/redo functionality
+  - Undo is partially working!!
 - Proper styling.
 - Code cleanup, separate whiteboard class into its own file.
 - Multiplayer version w/ node

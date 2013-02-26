@@ -27,33 +27,33 @@ $(document).ready(function() {
         var mousePos = function(event) {
             return {
                 x: event.pageX - this.offsetLeft,
-                y: event.pageY - this.offsetTop
+                y: event.pageY - this.offsetTop,
             };
         }.bind(this);
 
         // bind event handlers
         this.$canvas.mousedown(function(event) {
             this.isDrawing = true;
-            this.stateChange(mousePos(event));
+            this.stateChange(mousePos(event),  "mousedown");
             this.draw(this.logicalTime, ++this.logicalTime);
         }.bind(this));
 
         this.$canvas.mousemove(function(event) {
             if (this.isDrawing) {
-                this.stateChange(mousePos(event));
+                this.stateChange(mousePos(event), "mousemove");
                 this.draw(this.logicalTime, ++this.logicalTime);
             }
         }.bind(this));
 
         this.$canvas.mouseup(function(event) {
             this.isDrawing = false;
-            this.stateChange(mousePos(event));
+            this.stateChange(mousePos(event), "mouseup");
             this.draw(this.logicalTime, ++this.logicalTime);
         }.bind(this));
 
         this.$canvas.mouseleave(function(event) {
             this.isDrawing = false;
-            this.stateChange(mousePos(event));
+            this.stateChange(mousePos(event), "mouseleave");
             this.draw(this.logicalTime, ++this.logicalTime);
         }.bind(this));
 
@@ -96,13 +96,37 @@ $(document).ready(function() {
         }
     };
 
-    Whiteboard.prototype.stateChange = function(pos) {
+    Whiteboard.prototype.stateChange = function(pos, type) {
+        console.log(this.history);
         this.history.push({
             pos: pos,
             color: this.lineColor,
             width: this.lineWidth,
-            drawing: this.isDrawing
+            drawing: this.isDrawing,
+            type: type
         });
+    };
+
+    // Undo the last segment
+    Whiteboard.prototype.undo = function() {
+        // Find the last mousedown event, default to 1
+        //(case when there was only one segment drawn)
+
+        var lastMouseDownTime = 0;
+        // Look back from start to event at time 1 (since 0 is lowest)
+        for (var i = this.history.length - 1; i > 0; i--) {
+            if (this.history[i].type === "mousedown") {
+                lastMouseDownTime = i;
+                break;
+            }
+        }
+        // Set logicaltime to the time before point, and redraw
+        this.logicalTime = lastMouseDownTime - 1;
+        // Destroy anything past the current time
+        console.log(lastMouseDownTime);
+        this.history.length = this.logicalTime + 1;
+        this.resetBoard();
+        this.draw(0, this.logicalTime);
     };
 
     Whiteboard.prototype.setLineWidth = function(width) {
@@ -146,8 +170,7 @@ $(document).ready(function() {
 
     // undo button
     $undoButton.click(function() {
-        //undoLastSegment();
-        // no op
+        wb.undo();
     });
 
     // reset button
